@@ -14,11 +14,12 @@
     <div class="container">
 
         <div class="form-box login">
-            <form id="formLogin" autocomplete="off">
+            <form id="formLogin" autocomplete="off" method="POST" action="{{ route('login.process') }}">
+                @csrf
                 <h1>Login</h1>
                 <div class="form-grup">
                     <label for="inputUsernameOrEmail">Username or Email</label>
-                    <input type="text" id="inputUsernameOrEmail" class="inputUsernameOrEmail" required
+                    <input type="text" name="login" id="inputUsernameOrEmail" class="inputUsernameOrEmail" required
                         aria-label="inputUsernameOrEmail">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -28,7 +29,8 @@
 
                 <div class="form-grup">
                     <label for="inputPassword">Password</label>
-                    <input type="password" id="inputPassword" class="inputPassword" required aria-label="inputPassword">
+                    <input type="password" name="password" id="inputPassword" class="inputPassword" required
+                        aria-label="inputPassword">
                     <div id="icon-password">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-eye-slash-fill active" viewBox="0 0 16 16">
