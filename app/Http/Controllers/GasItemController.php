@@ -14,8 +14,8 @@ class GasItemController extends Controller
      */
     public function index()
     {
-        $items = GasItem::orderBy('created_at', 'desc')->get();
-        return view('gas.index', compact('items'));
+        $Items = GasItem::paginate(10);
+        return view('gas.index', compact('Items'));
     }
 
     /**

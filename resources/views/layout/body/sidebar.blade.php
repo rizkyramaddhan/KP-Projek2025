@@ -1,53 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    @vite(['resources/css/style.css', 'resources/js/script.js'])
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="sidebar">
-            <header class="header">
-                <a href="">
-                    <img src="{{ asset('build/assets/img/static/icon-header.svg') }}" width="22.83px" height="16px"
-                        alt="" class="icon-header">
-                    <span class="description-header">Command Center</span>
-                </a>
-            </header>
-
-            <div class="main">
-                <div class="list-item">
-                    <a href="">
-                        <img src="{{ asset('build/assets/img/static/main-header.png') }}" width="154px" height="97"
-                            alt="" class="icon">
-                        <span class="description"></span>
-                    </a>
-
-                    <ul>
-                        <li>
-                            <img src="{{ asset('build/assets/img/sidebar/dashboard.svg') }}" alt="">
-                            <span>Dashboard</span>
-                        </li>
-                        <li>
-                            <img src="{{ asset('build/assets/img/sidebar/analytic.svg') }}" alt="">
-                            <span>Analytics</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-content">
-
-        </div>
-    </div>
-
-</body>
-
-</html>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/dashboard" class="active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="/pengguna">
+                <i class="fas fa-users"></i>
+                <span>Pengguna</span>
+            </a>
+        </li>
+        <li>
+            <a href="/gas">
+                <i class="fas fa-box"></i>
+                <span>Produk</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Transaksi</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-chart-bar"></i>
+                <span>Laporan</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-clock"></i>
+                <span>Log Activity</span>
+            </a>
+        </li>
+        <div class="menu-divider"></div>
+        <li>
+            <a href="/pengaturan">
+                <i class="fas fa-cog"></i>
+                <span>Pengaturan</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-question-circle"></i>
+                <span>Bantuan</span>
+            </a>
+        </li>
+    </ul>
+</aside>
