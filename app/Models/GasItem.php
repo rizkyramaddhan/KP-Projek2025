@@ -11,8 +11,29 @@ class GasItem extends Model
         'code_barang',
         'harga',
         'qty',
-        'jenis'
+        'jenis',
+        'saw_score',
     ];
+
+        protected $appends = ['status_stok', 'warna_stok'];
+
+public function getStatusStokAttribute()
+{
+    return match (true) {
+        $this->qty == 0      => 'Habis',
+        $this->qty < 15      => 'Menipis',
+        default              => 'Tersedia',
+    };
+}
+
+public function getWarnaStokAttribute()
+{
+    return match ($this->status_stok) {
+        'Habis' => 'danger',
+        'Menipis' => 'warning',
+        default => 'success',
+    };
+}
 
     
 }

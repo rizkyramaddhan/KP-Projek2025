@@ -35,7 +35,7 @@ class LoginController extends Controller
             LogActivity::create([
                 'username' => Auth::user()->username,
                 'activity' => 'user Login ke Sistem'
-            ]);
+            ]); 
 
             if(Auth::user()->role === 'administrator'){
                 return redirect()->route('dashboard');

@@ -184,7 +184,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="alertError" class="alert alert-danger d-none"></div>
-                    <form id="formTambahProduk">
+                    <form id="formTambahPengguna">
                         @csrf
 
                         <div class="row">
@@ -224,7 +224,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Batal
                     </button>
-                    <button type="submit" form="formTambahProduk" class="btn btn-primary">
+                    <button type="submit" form="formTambahPengguna" class="btn btn-primary">
                         Simpan Produk
                     </button>
                 </div>
@@ -293,11 +293,12 @@
         </div>
     </div>
 
+    {{-- Modal Detail Pengguna --}}
     <div class="modal fade" id="modalDetailPengguna" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Pengguna</h5>
+                    <h5 class="modal-title">Detail Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -438,6 +439,7 @@
         });
 
         document.getElementById("modalDetailPengguna").addEventListener("hidden.bs.modal", () => {
+
             document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
         });
 
@@ -486,9 +488,6 @@
                 alert("Gagal menghapus pengguna.");
             }
         });
-
-
-
 
         document.querySelectorAll(".btnEdit").forEach(btn => {
             btn.addEventListener("click", async function() {
@@ -554,8 +553,7 @@
         });
 
         // Form Submit Handler
-        // Form Submit Handler
-        const formTambah = document.getElementById("formTambahProduk");
+        const formTambah = document.getElementById("formTambahPengguna");
 
         if (formTambah) {
             formTambah.addEventListener("submit", async function(e) {
@@ -607,6 +605,9 @@
 
                         // Reset form
                         formTambah.reset();
+
+                        // OPTIONAL: reload table
+                        location.reload();
                     }
 
                 } catch (error) {

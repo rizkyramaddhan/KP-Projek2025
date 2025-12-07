@@ -4,52 +4,46 @@ use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GasItemController;
 use App\Http\Controllers\logActivityController;
+use App\Http\Controllers\pengaturanController;
 use App\Http\Controllers\penggunaController;
-use App\Models\LogActivity;
-use Illuminate\Container\Attributes\Auth;
-use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\SPKController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
 
-Route::get('/login', [LoginController::class, 'showLoginFrom'])->name('login');
+// ---------------------------
+// AUTH ROUTES (bebas akses)
+// ---------------------------
+Route::get('/', [LoginController::class, 'showLoginFrom'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
-Route::get('/log-activity', [logActivityController::class, 'index'])->name('logactivity.index');
+// ---------------------------
+// ROUTE YANG HARUS LOGIN
+// ---------------------------
+Route::middleware('auth')->group(function () {
 
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Log Activity
+    Route::get('/logActivity', [logActivityController::class, 'index'])->name('logactivity.index');
 
-Route::resource('gas', GasItemController::class)->middleware('auth')->parameters([
-    'gas' => 'gas'
-]);
+    // SPK Menu
+    Route::get('/spk', [SPKController::class, 'index'])->name('spk.index');
 
-// Halaman daftar barang & menu SPK
-Route::get('/spk', [SPKController::class, 'index'])->name('spk.index');
+    // Pengguna
+    Route::get('/pengguna', [penggunaController::class, 'index'])->name('pengguna.index');
+    Route::post('/pengguna', [penggunaController::class, 'store'])->name('pengguna.store');
+    Route::get('/pengguna/{id}', [penggunaController::class, 'show']);
+    Route::put('/pengguna/{id}', [penggunaController::class, 'update'])->name('pengguna.update');
+    Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
 
-Route::get('/pengguna', [penggunaController::class, 'index'])->name('pengguna.index');
-Route::post('/pengguna', [penggunaController::class, 'store'])->name('pengguna.store');
-Route::get('/pengguna/{id}', [penggunaController::class, 'show']);
-Route::put('/pengguna/{id}', [penggunaController::class, 'update'])->name('pengguna.update');
-Route::get('/pengguna/{id}', [penggunaController::class, 'detail']);
-Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    // Produk Gas
+    Route::resource('gas', GasItemController::class)
+        ->parameters(['gas' => 'gas']);
 
-
-
-
-
-Route::get('/pengaturan', function(){
-    return view('pengaturan.index');
+    // Pengaturan
+    Route::get('/pengaturan', [pengaturanController::class, 'index'])->name('pengaturan.index');
+    Route::put('/pengaturan/{id}', [pengaturanController::class, 'update'])->name('pengaturan.update');
 });
-
-
-
-Route::get('/sidebar', function (){
-    return view('layout.body.sidebar');
-})->name('dashboard');
-

@@ -8,9 +8,9 @@
         <div class="container-fluid">
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Manajemen Produk</h1>
+                <h1 class="h3 mb-0 text-gray-800">Manajemen Transaksi</h1>
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahProduk">
-                    <i class="fas fa-plus fa-sm me-1"></i>Tambah Produk
+                    <i class="fas fa-plus fa-sm me-1"></i>Tambah Transaksi
                 </button>
             </div>
 
@@ -22,7 +22,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Total Produk
+                                        Total Transaksi
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                                         {{ $totalBarang }}
@@ -62,9 +62,9 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                        Stok Menipis
+                                        Pendapatan Bulan Ini
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stokMenipis }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="card-icon bg-warning-gradient">
                                     <i class="fas fa-exclamation-triangle"></i>
@@ -80,9 +80,9 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                        Stok Habis
+                                        Total Pendapatan
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stokHabis }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="card-icon"
                                     style="
@@ -135,7 +135,7 @@
             <!-- Tabel Produk -->
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Produk</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Transaksi</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -153,7 +153,7 @@
                                 </tr>
                             </thead>
                             <tbody id="bodyProduk">
-                                @foreach ($Items as $item)
+                                {{-- @foreach ($Items as $item)
                                     <tr>
                                         <td>{{ $item->iteration }}</td>
                                         <td>
@@ -174,13 +174,12 @@
                                                 data-bs-target="#modalUpdateProduk" data-id="{{ $item->id }}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button class="btn btn-sm btnDelete btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#modalDeleteProduk" data-id="{{ $item->id }}">
+                                            <button class="btn btn-sm btn-danger" onclick="hapusProduk(5)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -363,32 +362,6 @@
         </div>
     </div>
 
-    {{-- Modal Delete Produk --}}
-    <!-- Modal Delete -->
-    <div class="modal fade" id="modalDeleteProduk" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Hapus Produk</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <p>Apakah kamu yakin ingin menghapus Produk ini?</p>
-                    <strong id="deleteProduk"></strong>
-                    <input type="hidden" id="deleteProdukId">
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button class="btn btn-danger" id="btnConfirmDelete">Hapus</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Search & Filter Functions
@@ -438,221 +411,7 @@
                 filterTable();
             }
 
-            // CRUD Functions
-            document.querySelectorAll(".btnDetail").forEach(btn => {
-                btn.addEventListener("click", async function() {
-                    let id = this.dataset.id;
 
-                    let res = await fetch(`/gas/${id}`);
-                    let Barang = await res.json();
-
-                    // isi modal
-                    // document.getElementById("detailBarangId").innerText = Barang.id ?? "-";
-                    document.getElementById("detailCodeBarang").innerText = Barang
-                        .code_barang ?? "-";
-                    document.getElementById("detailJenis").innerText = Barang.jenis;
-                    document.getElementById("detailNamaBarang").innerText = Barang
-                        .nama_barang ?? "-";
-                    document.getElementById("detailHarga").innerText = parseInt(Barang.harga) ??
-                        "-";
-                    document.getElementById("detailQTY").innerText = Barang.qty ?? "-";
-                    document.getElementById("detailStatus").innerText = Barang
-                        .status_stok ??
-                        "-";
-                    document.getElementById("detailCreateAt").innerText = Barang.created_at ??
-                        "-";
-                    document.getElementById("detailUpdatedAt").innerText = Barang.updated_at ??
-                        "-";
-
-                    new bootstrap.Modal(document.getElementById("modalDetailProduk")).show();
-
-
-                });
-            });
-
-            document.querySelectorAll(".btnEdit").forEach(btn => {
-                btn.addEventListener("click", async function() {
-                    let id = this.dataset.id;
-
-                    let res = await fetch(`/gas/${id}`);
-                    let Barang = await res.json();
-
-                    // isi modal
-                    document.getElementById("editBarangId").value = Barang.id;
-                    document.getElementById("editCodeBarang").value = Barang.code_barang;
-                    document.getElementById("editJenis").value = Barang.jenis;
-                    document.getElementById("editNamaBarang").value = Barang.nama_barang;
-                    document.getElementById("editHarga").value = parseInt(Barang.harga);
-                    document.getElementById("editQTY").value = Barang.qty;
-
-                    new bootstrap.Modal(document.getElementById("modalUpdateProduk")).show();
-                });
-            });
-
-            document.getElementById("btnUpdateBarang").addEventListener("click", async function() {
-
-                const form = document.getElementById("formUpdateProduk");
-                const formData = new FormData(form);
-                const id = document.getElementById("editBarangId").value;
-
-                const alertError = document.getElementById("alertEditError");
-                alertError.classList.add("d-none");
-                alertError.innerHTML = "";
-
-                let response = await fetch(`/gas/${id}`, {
-                    method: "POST",
-                    credentials: "same-origin",
-                    headers: {
-                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
-                        "X-HTTP-Method-Override": "PUT"
-                    },
-                    body: formData
-                });
-
-                if (response.status === 422) {
-                    let errorData = await response.json();
-                    let text = "";
-
-                    Object.keys(errorData.errors).forEach(key => {
-                        text += `<div>${errorData.errors[key][0]}</div>`;
-                    });
-
-                    alertError.innerHTML = text;
-                    alertError.classList.remove("d-none");
-                    return;
-                }
-
-                let result = await response.json();
-
-                if (result.success) {
-                    alert(result.message);
-
-                    bootstrap.Modal.getInstance(document.getElementById("modalUpdateProduk")).hide();
-                    form.reset();
-
-                    // OPTIONAL: reload table
-                    location.reload();
-                }
-            });
-
-            document.getElementById("modalDetailProduk").addEventListener("hidden.bs.modal", () => {
-                document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-            });
-
-            document.getElementById("modalUpdateProduk").addEventListener("hidden.bs.modal", () => {
-                document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-            });
-
-            // Tombol Delete di tabel
-            document.querySelectorAll(".btnDelete").forEach(btn => {
-                btn.addEventListener("click", async function() {
-
-                    let id = this.dataset.id;
-
-                    // ambil user detail (untuk ditampilkan di modal)
-                    let response = await fetch(`/gas/${id}`);
-                    let Barang = await response.json();
-
-                    document.getElementById("deleteProduk").innerText = Barang.nama_barang;
-                    document.getElementById("deleteProdukId").value = id;
-
-                    new bootstrap.Modal(document.getElementById("modalDeleteProduk")).show();
-                });
-            });
-
-            // Confirm Delete
-            document.getElementById("btnConfirmDelete").addEventListener("click", async function() {
-
-                let id = document.getElementById("deleteProdukId").value;
-
-                let response = await fetch(`/gas/${id}`, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
-                        "X-HTTP-Method-Override": "DELETE"
-                    },
-                });
-
-                let result = await response.json();
-
-                if (result.success) {
-                    alert(result.message);
-                    new bootstrap.Modal(document.getElementById("modalDeleteProduk")).hide();
-                    location.reload();
-                    modal.hide();
-
-                    // Reset form
-                    formTambah.reset();
-
-                } else {
-                    alert("Gagal menghapus pengguna.");
-                }
-            });
-
-            document.getElementById("modalDeleteProduk").addEventListener("hidden.bs.modal", () => {
-                document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-            });
-
-            const formTambah = document.getElementById("formTambahProduk");
-
-            if (formTambah) {
-                formTambah.addEventListener("submit", async function(e) {
-                    e.preventDefault();
-
-                    // Ambil data form
-                    const formData = new FormData(formTambah);
-
-                    // Reset Error Alert
-                    const alertError = document.getElementById("alertError");
-                    alertError.classList.add("d-none");
-                    alertError.innerHTML = "";
-
-                    try {
-                        const response = await fetch("{{ route('gas.store') }}", {
-                            method: "POST",
-                            body: formData,
-                            credentials: 'same-origin', // ← WAJIB!
-                            headers: {
-                                "X-CSRF-TOKEN": document.querySelector('input[name="_token"]')
-                                    .value
-                            }
-                        });
-
-                        // Jika validasi gagal Laravel → status 422
-                        if (response.status === 422) {
-                            const errorData = await response.json();
-                            let errorMessages = "";
-
-                            Object.keys(errorData.errors).forEach((key) => {
-                                errorMessages += `<div>${errorData.errors[key][0]}</div>`;
-                            });
-
-                            alertError.innerHTML = errorMessages;
-                            alertError.classList.remove("d-none");
-                            return; // hentikan proses
-                        }
-
-                        // Ambil result sukses
-                        const result = await response.json();
-
-                        if (result.success) {
-                            alert(result.message);
-
-                            // Tutup modal
-                            const modal = bootstrap.Modal.getInstance(
-                                document.getElementById("modalTambahProduk")
-                            );
-                            modal.hide();
-
-                            // Reset form
-                            formTambah.reset();
-                        }
-
-                    } catch (error) {
-                        alert("Terjadi kesalahan server. Coba lagi.");
-                    }
-                });
-            }
 
         });
     </script>

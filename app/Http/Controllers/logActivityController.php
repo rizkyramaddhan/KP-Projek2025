@@ -8,7 +8,9 @@ use App\Models\LogActivity;
 class logActivityController extends Controller
 {
     public function index(){
-        $logs = LogActivity::latest()->paginate(20);
-        return view('logactivity.index', compact('logs'));
+        $logActivities = LogActivity::orderBy('created_at', 'desc')->paginate(10);
+        $totalLogActivity = LogActivity::count();
+
+        return view('logactivity.index', compact('logActivities', 'totalLogActivity'));
     }
 }

@@ -178,7 +178,7 @@ body {
   text-align: center;
   color: var(--secondary-color);
   border-top: 1px solid #e3e6f0;
-  margin-left: var(--sidebar-width);
+  /* margin-left: var(--sidebar-width); */
   transition: margin-left 0.3s ease;
 }
 

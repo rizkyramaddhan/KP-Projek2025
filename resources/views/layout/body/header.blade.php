@@ -11,10 +11,15 @@
     </div>
     <div class="header-right">
         <div class="dropdown">
-            <button class="btn btn-link text-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="fas fa-user-circle fa-fw"></i>
-                <span class="d-none d-md-inline ms-1">Admin</span>
+            <button class="btn btn-link text-secondary dropdown-toggle d-flex align-items-center" type="button"
+                data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle fa-2x me-2"></i>
+                <div class="text-start d-none d-md-block">
+                    <div class="fw-semibold">{{ auth()->user()->username }}</div>
+                    <small class="text-muted">{{ auth()->user()->role ?? 'User' }}</small>
+                </div>
             </button>
+
             <ul class="dropdown-menu dropdown-menu-end">
                 {{-- <li>
                     <a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a>
@@ -23,7 +28,11 @@
                     <a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a>
                 </li> --}}
                 <li>
-                    <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item text-danger">Logout</button>
+                    </form>
+
                 </li>
                 <li>
                     <hr class="dropdown-divider" />
