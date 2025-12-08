@@ -25,7 +25,7 @@
                                         Total Transaksi
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{ $totalBarang }}
+
                                     </div>
                                 </div>
                                 <div class="card-icon bg-primary-gradient">
@@ -45,7 +45,7 @@
                                         Stok Tersedia
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{ $totalQty }}
+
                                     </div>
                                 </div>
                                 <div class="card-icon bg-success-gradient">
@@ -187,7 +187,7 @@
                     <!-- Pagination -->
                     <nav aria-label="Page navigation" class="mt-3">
                         <ul class="pagination justify-content-end">
-                            {{ $Items->links('pagination::bootstrap-5') }}
+
                         </ul>
                     </nav>
                 </div>

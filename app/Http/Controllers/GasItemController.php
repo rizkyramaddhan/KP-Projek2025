@@ -176,4 +176,49 @@ class GasItemController extends Controller
         ], 500);
     }
 }
+
+public function tambahStok(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'barang_id' => 'required|exists:gas_items,id',
+        'qty'       => 'required|integer|min:1',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    DB::beginTransaction();
+
+    try {
+        $barang = GasItem::findOrFail($request->barang_id);
+
+        $barang->qty += $request->qty;
+        $barang->save();
+
+        LogActivity::create([
+            'username' => Auth::user()->username,
+            'activity' => "Menambah stok: {$request->qty} ke barang {$barang->nama_barang} (Kode: {$barang->code_barang})"
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stok berhasil ditambahkan!'
+        ]);
+
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal menambahkan stok.',
+        ], 500);
+    }
+}
+
+
+
 }

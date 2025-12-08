@@ -9,9 +9,14 @@
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Manajemen Produk</h1>
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahProduk">
-                    <i class="fas fa-plus fa-sm me-1"></i>Tambah Produk
-                </button>
+                <div class="d-flex gap-2 mt-3 mt-sm-0">
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahProduk">
+                        <i class="fas fa-plus fa-sm me-1"></i>Tambah Produk Baru
+                    </button>
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahStok">
+                        <i class="fas fa-box fa-sm me-1"></i>Tambah Stok Produk
+                    </button>
+                </div>
             </div>
 
             <!-- Stats Cards -->
@@ -364,7 +369,6 @@
     </div>
 
     {{-- Modal Delete Produk --}}
-    <!-- Modal Delete -->
     <div class="modal fade" id="modalDeleteProduk" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -383,6 +387,49 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button class="btn btn-danger" id="btnConfirmDelete">Hapus</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Stok -->
+    <div class="modal fade" id="modalTambahStok" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Stok</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="alertError" class="alert alert-danger d-none"></div>
+                    <form id="formTambahStok">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Nama Barang<span class="text-danger">*</span></label>
+                                <select class="form-select" name="barang_id" id="barangId" required>
+                                    <option value="">Pilih Nama Barang</option>
+                                    @foreach ($Items as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nama_barang }} (Kode:
+                                            {{ $item->code_barang }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Stok <span class="text-danger">*</span></label>
+                                <input type="number" name="qty" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
+                            <button type="submit" form="formTambahStok" id="btnTambahStok" class="btn btn-primary">
+                                Simpan Produk
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
             </div>
@@ -591,6 +638,53 @@
 
             document.getElementById("modalDeleteProduk").addEventListener("hidden.bs.modal", () => {
                 document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+            });
+
+            document.getElementById("btnTambahStok").addEventListener("click", async function() {
+
+                const form = document.getElementById("formTambahStok");
+                const formData = new FormData(form);
+                const id = document.getElementById("barangId").value;
+
+                const alertError = document.getElementById("alertEditError");
+                alertError.classList.add("d-none");
+                alertError.innerHTML = "";
+
+                let response = await fetch(`/gas/tambah-stok`, {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
+                        "X-HTTP-Method-Override": "PUT"
+                    },
+                    body: formData
+                });
+
+                if (response.status === 422) {
+                    let errorData = await response.json();
+                    let text = "";
+
+                    Object.keys(errorData.errors).forEach(key => {
+                        text += `<div>${errorData.errors[key][0]}</div>`;
+                    });
+
+                    alertError.innerHTML = text;
+                    alertError.classList.remove("d-none");
+                    return;
+                }
+
+                let result = await response.json();
+
+                if (result.success) {
+                    alert(result.message);
+
+                    bootstrap.Modal.getInstance(document.getElementById("modalTambahStok")).hide();
+                    form.reset();
+
+                    // OPTIONAL: reload table
+                    location.reload();
+                }
             });
 
             const formTambah = document.getElementById("formTambahProduk");

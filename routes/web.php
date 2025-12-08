@@ -1,13 +1,15 @@
 <?php
 
-use App\Http\Controllers\auth\LoginController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GasItemController;
-use App\Http\Controllers\logActivityController;
-use App\Http\Controllers\pengaturanController;
-use App\Http\Controllers\penggunaController;
-use App\Http\Controllers\SPKController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SPKController;
+use App\Http\Controllers\GasItemController;
+use App\Http\Controllers\penggunaController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\transaksiController;
+use App\Http\Controllers\auth\LoginController;
+use App\Http\Controllers\pengaturanController;
+use App\Http\Controllers\logActivityController;
+use App\Http\Controllers\tramsalsiController;
 
 
 // ---------------------------
@@ -38,10 +40,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengguna/{id}', [penggunaController::class, 'show']);
     Route::put('/pengguna/{id}', [penggunaController::class, 'update'])->name('pengguna.update');
     Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    // Route::put('/pengguna/{id}', [penggunaController::class, 'tambahStok'])->name('pengguna.updateStok');
+
 
     // Produk Gas
     Route::resource('gas', GasItemController::class)
         ->parameters(['gas' => 'gas']);
+        // Tambah Stok Gas
+Route::post('/gas/tambah-stok', [GasItemController::class, 'tambahStok'])
+    ->name('gas.tambah-stok');
+
+
+    // Transaksi Gas
+    Route::get('/transaksi', [transaksiController::class, 'index'])->name('transaksi.index');
 
     // Pengaturan
     Route::get('/pengaturan', [pengaturanController::class, 'index'])->name('pengaturan.index');

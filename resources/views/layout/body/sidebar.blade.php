@@ -23,7 +23,7 @@
         </li>
 
         <li>
-            <a href="#" class="{{ request()->is('transaksi*') ? 'active' : '' }}">
+            <a href="/transaksi" class="{{ request()->is('transaksi*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Transaksi</span>
             </a>
